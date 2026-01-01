@@ -1,0 +1,66 @@
+[tool.poetry]
+name = "effective-brushing-backend"
+version = "0.1.0"
+description = "高效刷题APP后端：支持多模式练习、离线刷题、AI解析、数据化复盘等核心功能"
+authors = ["f2095522823@gmail.com"]
+readme = "README.md"
+license = "MIT/Apache-2.0"
+homepage = ""
+
+[tool.poetry.dependencies]
+python = "^3.14"
+fastapi = "^0.111.0"
+alembic = "^1.13.1"  # 数据库迁移（需适配Oracle，后续调整alembic配置）
+httpx = "^0.27.0"  # HTTP客户端（调用AI接口、同步数据）
+pydantic = {extras = ["email"], version = "^2.7.4"}  # 数据校验
+pydantic-settings = "^2.3.2"  # 环境变量配置
+uvicorn = {extras = ["standard"], version = "^0.30.1"}  # ASGI服务器
+sentry-sdk = "^2.5.1"  # 错误监控
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.30"}  # 异步ORM
+# 核心业务依赖
+# MySQL 驱动 (异步)
+aiomysql = "^0.2.0"
+cryptography = "^42.0.0"
+# 认证相关
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+minio = "^7.2.0"  # MinIO对象存储客户端
+python-multipart = "^0.0.9"  # 文件上传处理
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.4.8"  # 代码检查/格式化
+pytest = "^8.2.2"  # 单元测试框架
+pytest-asyncio = "^0.23.6"  # 异步测试支持
+pytest-mock = "^3.14.0"  # 模拟依赖
+python-dotenv = "^1.0.1"  # 本地加载.env文件
+async-asgi-testclient = "^1.4.1"  # FastAPI异步测试客户端
+
+[tool.poetry.group.prod.dependencies]
+gunicorn = "^22.0.0"  # 生产环境进程管理器
+python-json-logger = "^2.0.7"  # JSON格式日志
+prometheus-client = "^0.20.0"  # 性能监控指标
+
+
+# 快捷脚本（开发/部署一键执行）
+[tool.poetry.scripts]
+# 启动开发服务
+start = "uvicorn src.main:app --reload --host 0.0.0.0 --port 8000"
+# 启动生产服务（gunicorn）
+start-prod = "gunicorn src.main:app -c gunicorn_conf.py"
+# 代码检查+格式化
+lint = "ruff check --fix . && ruff format ."
+# 数据库迁移初始化（首次执行）
+migrate-init = "alembic init alembic"
+# 生成迁移脚本
+migrate-make = "alembic revision --autogenerate -m"
+# 执行迁移
+migrate-up = "alembic upgrade head"
+# 回滚迁移
+migrate-down = "alembic downgrade -1"
+# 运行测试
+test = "pytest tests/ -v"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+

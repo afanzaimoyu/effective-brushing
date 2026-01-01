@@ -12,7 +12,7 @@ class QuestionBank(Base):
     question_count: Mapped[int] = mapped_column(Integer, default=0)
     is_public: Mapped[bool] = mapped_column(Boolean, default=False, comment="是否公开(预留)")
     price: Mapped[float] = mapped_column(Integer, default=0, comment="价格(预留)")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(timezone.utc))
     
     questions: Mapped[list["Question"]] = relationship(back_populates="bank", cascade="all, delete-orphan")
 
@@ -47,4 +47,4 @@ class WrongQuestion(Base):
     user_id: Mapped[str] = mapped_column(String(64), ForeignKey("t_user.id"), primary_key=True)
     question_id: Mapped[str] = mapped_column(String(64), ForeignKey("t_question.id"), primary_key=True)
     wrong_count: Mapped[int] = mapped_column(Integer, default=1)
-    last_wrong_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    last_wrong_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(timezone.utc))

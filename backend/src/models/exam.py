@@ -12,4 +12,4 @@ class Exam(Base):
     duration_minutes: Mapped[int] = mapped_column(Integer)
     total_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
     questions_snapshot: Mapped[str | None] = mapped_column(Text, comment="试题ID列表快照(JSON)")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(timezone.utc))

@@ -9,4 +9,4 @@ class Favorite(Base):
     user_id: Mapped[str] = mapped_column(String(64), ForeignKey("t_user.id"), primary_key=True)
     question_id: Mapped[str] = mapped_column(String(64), ForeignKey("t_question.id"), primary_key=True)
     note: Mapped[str | None] = mapped_column(Text, nullable=True, comment="收藏备注")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(timezone.utc))
